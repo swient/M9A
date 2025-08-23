@@ -40,15 +40,16 @@
         "next": [
             "Sub_Sp01RPS",
             "Sub_Sp01DataCollect",
-            "Sub_Sp01Messagers"
+            "Sp01Messagers",
+            "Sp01DailyEnter",
+            "HomeFlag"
         ],
         "interrupt": [
             "HomeButton",
             "BackButton"
         ]
     },
-    "Sub_Sp01Messagers": {
-        "is_sub": true,
+    "Sp01Messagers": {
         "recognition": {
             "type": "OCR",
             "param": {
