@@ -626,10 +626,15 @@
             "type": "Click"
         },
         "next": [
-            "Sp01DataCollect2"
+            "Sp01DataCollect2",
+            "Sp01DataCollect3"
+        ],
+        "interrupt": [
+            "ObtainedAwards"
         ]
     },
     "Sp01DataCollect2": {
+        "is_sub": true,
         "recognition": {
             "type": "OCR",
             "param": {
@@ -647,11 +652,8 @@
         "action": {
             "type": "Click"
         },
+        "post_delay": 500,
         "next": [
-            "Sp01DataCollect2",
-            "Sp01DataCollect3"
-        ],
-        "interrupt": [
             "ObtainedAwards"
         ]
     },
