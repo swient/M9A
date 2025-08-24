@@ -73,6 +73,7 @@
         "interrupt": [
             "Sp01MessagersChoose",
             "Sp01MessagersComfirm",
+            "Sp01MessagersNextRound",
             "ObtainedAwards",
             "ClosePage",
             "ClickHomeCount"
@@ -91,7 +92,8 @@
                 "expected": [
                     "屋顶知晓一切",
                     "押注暗巷",
-                    "飞刀先至"
+                    "飞刀先至",
+                    "循规蹈矩"
                 ]
             }
         },
@@ -123,6 +125,25 @@
                     50
                 ],
                 "count": 1000
+            }
+        },
+        "action": {
+            "type": "Click"
+        }
+    },
+    "Sp01MessagersNextRound": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    951,
+                    585,
+                    240,
+                    130
+                ],
+                "expected": [
+                    "开启下一轮"
+                ]
             }
         },
         "action": {
