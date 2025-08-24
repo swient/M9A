@@ -73,6 +73,8 @@
         "interrupt": [
             "Sp01MessagersChoose",
             "Sp01MessagersComfirm",
+            "ObtainedAwards",
+            "ClosePage",
             "ClickHomeCount"
         ]
     },
