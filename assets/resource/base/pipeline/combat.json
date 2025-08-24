@@ -9,11 +9,7 @@
             "type": "Custom",
             "param": {
                 "custom_action": "SelectCombatStage",
-                "custom_action_param": {
-                    "stage": "",
-                    "stageName": "",
-                    "level": ""
-                }
+                "custom_action_param_code": "stage&level"
             }
         },
         "next": [
