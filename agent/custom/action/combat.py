@@ -254,12 +254,6 @@ class ActivityTargetLevel(CustomAction):
 class SelectChapter(CustomAction):
     """
     章节选择 。
-
-    参数格式:
-    {
-        "mainStoryChapter": "第X大章",
-        "mainChapter": "第X小章（原章节）"
-    }
     """
 
     def run(
