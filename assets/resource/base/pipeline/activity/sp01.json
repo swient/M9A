@@ -662,12 +662,6 @@
         "recognition": {
             "type": "OCR",
             "param": {
-                "roi": [
-                    43,
-                    402,
-                    550,
-                    302
-                ],
                 "expected": [
                     "领取"
                 ]
