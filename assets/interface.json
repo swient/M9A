@@ -232,6 +232,9 @@
         {
             "name": "刺客信条联动每日任务",
             "entry": "Sp01Daily",
+            "option": [
+                "航海记难度(如选择困难成功概率约25%)"
+            ],
             "doc": "[size:15][color:tomato]剪刀石头布和数据拾遗 [/color][/size]"
         }
     ],
@@ -1935,6 +1938,52 @@
                                     "custom_recognition_param": {
                                         "difficulty": "Hard",
                                         "mode": "Quickly"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "航海记难度(如选择困难成功概率约25%)": {
+            "cases": [
+                {
+                    "name": "简单",
+                    "pipeline_override": {
+                        "SailingRecordSelectTarget": {
+                            "recognition": {
+                                "param": {
+                                    "custom_recognition_param": {
+                                        "level": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "困难",
+                    "pipeline_override": {
+                        "SailingRecordSelectTarget": {
+                            "recognition": {
+                                "param": {
+                                    "custom_recognition_param": {
+                                        "level": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "困难",
+                    "pipeline_override": {
+                        "Sp01Daily_DifficultySelect": {
+                            "action": {
+                                "param": {
+                                    "custom_action_param": {
+                                        "level": "Hard"
                                     }
                                 }
                             }

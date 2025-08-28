@@ -8,6 +8,8 @@ from maa.context import Context
 from utils import logger
 from utils import ms_timestamp_diff_to_dhm
 
+from custom.reco.activity import SailingRecordBoatRecord, SailingRecordSelectTarget
+
 
 @AgentServer.custom_action("DuringAct")
 class DuringAct(CustomAction):
@@ -100,10 +102,10 @@ class DuringAnecdote(CustomAction):
 
         for key in reversed(list(data.keys())):
             item = data[key]
-            
+
             if not item["activity"].get("anecdote"):
                 continue
-            
+
             if now < item["activity"]["anecdote"]["end_time"]:
                 if now > item["activity"]["anecdote"]["start_time"]:
                     logger.info(f"当前版本：{key} {item['version_name']}")
@@ -180,4 +182,136 @@ class DuringRe_release(CustomAction):
             {"JudgeDuringRe_release": {"next": [], "interrupt": []}}
         )
         logger.info("当前不在复刻作战开放时间，跳过当前任务")
+        return CustomAction.RunResult(success=True)
+
+
+@AgentServer.custom_action("SailingRecordDiceStrategy")
+class SailingRecordDiceStrategy(CustomAction):
+    """
+    计算骰子选择的最优策略
+
+    参数格式：
+    {
+        // 可以为空，将直接使用SailingRecordBoatRecord.dices中的骰子数据
+    }
+    """
+
+    @staticmethod
+    def calculate_optimal_dice_strategy(dices, target_min, target_max):
+        """
+        计算最优骰子选择策略，使得三次骰子点数之和落在目标范围内的概率最大
+
+        Args:
+            dices: 三个骰子的点数列表，每个骰子有六个面
+            target_min: 目标范围的最小值
+            target_max: 目标范围的最大值
+
+        Returns:
+            最优选择的骰子索引 (三次选择)和成功概率
+        """
+        # 统计每个骰子的概率分布
+        dice_probs = []
+        for dice in dices:
+            # 计算每个值的出现概率
+            values = {}
+            for value in dice:
+                values[value] = values.get(value, 0) + 1 / 6
+            dice_probs.append(values)
+
+        # 计算所有可能的三次选择组合的概率
+        best_prob = 0
+        best_choice = None
+
+        # 尝试所有可能的骰子选择组合 (i,j,k表示选择的骰子索引)
+        for i in range(3):  # 第一次选择
+            for j in range(3):  # 第二次选择
+                for k in range(3):  # 第三次选择
+                    # 计算所有可能的点数和及其概率
+                    sum_probs = {}
+
+                    # 计算三个骰子选择的所有可能结果
+                    for val1, prob1 in dice_probs[i].items():
+                        for val2, prob2 in dice_probs[j].items():
+                            for val3, prob3 in dice_probs[k].items():
+                                total = val1 + val2 + val3
+                                prob = prob1 * prob2 * prob3
+                                sum_probs[total] = sum_probs.get(total, 0) + prob
+
+                    # 计算和在目标范围内的总概率
+                    in_range_prob = sum(
+                        sum_probs.get(s, 0) for s in range(target_min, target_max + 1)
+                    )
+
+                    if in_range_prob > best_prob:
+                        best_prob = in_range_prob
+                        best_choice = (i, j, k)
+
+        return best_choice, best_prob
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> CustomAction.RunResult:
+        """
+        计算最优骰子选择策略
+        """
+        # 获取骰子数据，使用SailingRecordBoatRecord中存储的数据
+        dices = SailingRecordBoatRecord.dices
+
+        # 获取目标范围
+        target_min = SailingRecordSelectTarget.min
+        target_max = SailingRecordSelectTarget.max
+
+        logger.info(f"[DiceStrategy] 骰子数据: {dices}")
+        logger.info(f"[DiceStrategy] 目标范围: {target_min}~{target_max}")
+
+        # 计算最优选择策略
+        best_choice, best_prob = self.calculate_optimal_dice_strategy(
+            dices, target_min, target_max
+        )
+
+        SailingRecordDiceStrategy.best_choice = best_choice
+
+        logger.info(
+            f"[DiceStrategy] 最佳选择: {best_choice}, 成功概率: {best_prob:.2%}"
+        )
+
+        return CustomAction.RunResult(success=True)
+
+
+@AgentServer.custom_action("SailingRecordBoatSelect")
+class SailingRecordBoatSelect(CustomAction):
+    """
+    选择骰子
+    """
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> CustomAction.RunResult:
+        """
+        选择骰子
+        """
+        # 获取最佳选择
+        best_choice = SailingRecordDiceStrategy.best_choice
+
+        # 骰子数量 roi
+        roi_dices = [[239,541,39,26],[621,541,39,26],[1001,541,39,26]]
+        # plus&minus roi
+        roi_plus_minus = [[110,520,310,66],[491,521,310,66],[871,522,310,66]]
+
+        for i in range(3):
+            flag = False
+            while(not flag):
+                img = context.tasker.controller.post_screencap().wait().get()
+                reco_detail = context.run_recognition("SailingRecordBoatPointRecord", img, {"SailingRecordBoatPointRecord": {"roi": roi_dices[i]}})
+                if best_choice.count(i) > int(reco_detail.best_result.text):
+                    context.run_task("SailingRecordBoatOp", {"SailingRecordBoatOp": {"template": "Sp01/Plus.png", "roi": roi_plus_minus[i]}})
+                elif best_choice.count(i) < int(reco_detail.best_result.text):
+                    context.run_task("SailingRecordBoatOp", {"SailingRecordBoatOp": {"template": "Sp01/Minus.png", "roi": roi_plus_minus[i]}})
+                else:
+                    flag = True
+
         return CustomAction.RunResult(success=True)
