@@ -38,6 +38,26 @@
             "type": "Click"
         },
         "next": [
+            "FlagInSp01Daily",
+            "Sp01DailyEnter"
+        ]
+    },
+    "FlagInSp01Daily": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    1009,
+                    493,
+                    238,
+                    137
+                ],
+                "expected": [
+                    "数据拾遗"
+                ]
+            }
+        },
+        "next": [
             // "Sub_Sp01RPS",
             "Sub_SailingRecord",
             "Sub_Sp01DataCollect",
