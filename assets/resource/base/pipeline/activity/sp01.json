@@ -369,7 +369,7 @@
                     132
                 ],
                 "expected": [
-                    "开始新一轮"
+                    "新一轮"
                 ]
             }
         },
@@ -379,7 +379,7 @@
         "post_delay": 1500,
         "post_wait_freezes": 300,
         "next": [
-            "SailingRecordBoatOp",
+            "FlagInSailingRecordStart",
             "SailingRecordBoatStartNext"
         ]
     },
