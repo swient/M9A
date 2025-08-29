@@ -198,8 +198,8 @@ class SailingRecordSelectTarget(CustomRecognition):
                     {"SailingRecordFindNormal": {"roi": box, "only_rec": False}},
                 )
                 text = reco_detail.best_result.text
-                # 提取数字
-                match = re.search(r"(\d+)\s*~\s*(\d+)", text)
+                # 提取数字，支持负数
+                match = re.search(r"(-?\d+)\s*~\s*(-?\d+)", text)
                 if match:
                     num1, num2 = int(match.group(1)), int(match.group(2))
                 SailingRecordSelectTarget.min = num1
@@ -222,10 +222,10 @@ class SailingRecordSelectTarget(CustomRecognition):
 
             diffs, nums = [], []
             for detail in reco_details:
-                # text: 所需点数20~25
+                # text: 所需点数20~25 或 所需点数-3~3 (含负数)
                 text = detail.best_result.text
-                # 提取数字
-                match = re.search(r"(\d+)\s*~\s*(\d+)", text)
+                # 提取数字，支持负数
+                match = re.search(r"(-?\d+)\s*~\s*(-?\d+)", text)
                 if match:
                     num1, num2 = int(match.group(1)), int(match.group(2))
                     nums.append((num1, num2))
