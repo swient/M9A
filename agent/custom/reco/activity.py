@@ -268,6 +268,7 @@ class SailingRecordBoatRecord(CustomRecognition):
                 if reco_detail is None or not reco_detail.box:
                     return CustomRecognition.AnalyzeResult(box=None, detail="无目标")
                 point = reco_detail.best_result.text
+                point = 0 if point in ["?", "？"] else point
                 points.append(int(point))
                 roi = [roi[0] + 47, roi[1], roi[2], roi[3]]
             dices.append(points)
