@@ -271,7 +271,9 @@ class SailingRecordDiceStrategy(CustomAction):
             dices, target_min, target_max
         )
 
-        SailingRecordDiceStrategy.best_choice = best_choice
+        SailingRecordDiceStrategy.best_choice = (
+            best_choice if best_choice else (0, 0, 0)
+        )
 
         logger.info(
             f"[DiceStrategy] 最佳选择: {best_choice}, 成功概率: {best_prob:.2%}"
@@ -298,19 +300,39 @@ class SailingRecordBoatSelect(CustomAction):
         best_choice = SailingRecordDiceStrategy.best_choice
 
         # 骰子数量 roi
-        roi_dices = [[239,541,39,26],[621,541,39,26],[1001,541,39,26]]
+        roi_dices = [[239, 541, 39, 26], [621, 541, 39, 26], [1001, 541, 39, 26]]
         # plus&minus roi
-        roi_plus_minus = [[110,520,310,66],[491,521,310,66],[871,522,310,66]]
+        roi_plus_minus = [[110, 520, 310, 66], [491, 521, 310, 66], [871, 522, 310, 66]]
 
         for i in range(3):
             flag = False
-            while(not flag):
+            while not flag:
                 img = context.tasker.controller.post_screencap().wait().get()
-                reco_detail = context.run_recognition("SailingRecordBoatPointRecord", img, {"SailingRecordBoatPointRecord": {"roi": roi_dices[i]}})
+                reco_detail = context.run_recognition(
+                    "SailingRecordBoatPointRecord",
+                    img,
+                    {"SailingRecordBoatPointRecord": {"roi": roi_dices[i]}},
+                )
                 if best_choice.count(i) > int(reco_detail.best_result.text):
-                    context.run_task("SailingRecordBoatOp", {"SailingRecordBoatOp": {"template": "Sp01/Plus.png", "roi": roi_plus_minus[i]}})
+                    context.run_task(
+                        "SailingRecordBoatOp",
+                        {
+                            "SailingRecordBoatOp": {
+                                "template": "Sp01/Plus.png",
+                                "roi": roi_plus_minus[i],
+                            }
+                        },
+                    )
                 elif best_choice.count(i) < int(reco_detail.best_result.text):
-                    context.run_task("SailingRecordBoatOp", {"SailingRecordBoatOp": {"template": "Sp01/Minus.png", "roi": roi_plus_minus[i]}})
+                    context.run_task(
+                        "SailingRecordBoatOp",
+                        {
+                            "SailingRecordBoatOp": {
+                                "template": "Sp01/Minus.png",
+                                "roi": roi_plus_minus[i],
+                            }
+                        },
+                    )
                 else:
                     flag = True
 
