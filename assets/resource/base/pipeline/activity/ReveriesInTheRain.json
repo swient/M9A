@@ -203,7 +203,7 @@
             "Trancele1",
             "Trancele2",
             "Trancele3",
-            "Tranceme4"
+            "Trancele4"
         ]
     },
     "TrancePlay": {
@@ -241,6 +241,7 @@
             }
         },
         "next": [
+            "ObtainedAwards",
             "TrancePlayTimesX1"
         ],
         "interrupt": [
@@ -264,6 +265,7 @@
             }
         },
         "next": [
+            "ObtainedAwards",
             "TrancePlayTimesX2"
         ],
         "interrupt": [
@@ -287,6 +289,7 @@
             }
         },
         "next": [
+            "ObtainedAwards",
             "TrancePlayTimesX3"
         ],
         "interrupt": [
@@ -294,7 +297,7 @@
             "TranceOpenSetPlayTimes"
         ]
     },
-    "Tranceme4": {
+    "Trancele4": {
         "doc": "“寻思”x4-8",
         "recognition": {
             "type": "OCR",
@@ -310,6 +313,7 @@
             }
         },
         "next": [
+            "ObtainedAwards",
             "TrancePlayTimesX4"
         ],
         "interrupt": [
