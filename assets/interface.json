@@ -1403,16 +1403,16 @@
         "饕餮": {
             "cases": [
                 {
-                    "name": "Yes",
-                    "pipeline_override": {}
-                },
-                {
                     "name": "No",
                     "pipeline_override": {
                         "Gluttony": {
                             "enabled": false
                         }
                     }
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {}
                 }
             ]
         },
