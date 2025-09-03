@@ -2,11 +2,44 @@
     "Sp01Daily": {
         "next": [
             "Sp01DailyEnter",
-            "HomeFlag"
+            "HomeFlagForSp_01"
         ],
         "interrupt": [
             "HomeButton",
             "BackButton"
+        ]
+    },
+    "HomeFlagForSp_01": {
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "roi": [
+                    1022,
+                    419,
+                    194,
+                    166
+                ],
+                "template": [
+                    "StartUp/HomeFlag.png",
+                    "StartUp/HomeFlag_sp01.png"
+                ]
+            }
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    576,
+                    298,
+                    68,
+                    64
+                ]
+            }
+        },
+        "post_delay": 5000,
+        "next": [
+            "Sp01DailyEnter",
+            "HomeFlag"
         ]
     },
     "Sp01DailyEnter": {
