@@ -257,7 +257,7 @@ jobs:
       - name: Download Python dependencies
         shell: bash
         run: |
-          ./install/python/bin/python3 tools/ci/download_deps.py --deps-dir deps
+          ./install/python/bin/python3 tools/ci/download_deps.py --deps-dir install/deps
 
       - name: Install on macOS
         shell: bash
